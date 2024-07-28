@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mood-Based Activity Suggester</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Mood-Based Activity Suggester</h1>
+    <input type="text" id="mood" placeholder="Enter your mood">
+    <button onclick="getActivities()">Get Activities</button>
+    <div id="activities"></div>
+
+    <script>
+        async function getActivities() {
+            const mood = document.getElementById('mood').value;
+            const response = await fetch('/get_activities', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    mood
+                })
+            });
+            const activities = await response.json();
+            const activitiesDiv = document.getElementById('activities');
+            activitiesDiv.innerHTML = activities.map(activity => `
+                <div>
+                    <p>${activity}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+
+</html>
